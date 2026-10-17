@@ -29,8 +29,10 @@ OPENVOICE_ORT_DLL=<onnxruntime.dll> OPENVOICE_CUDA=1 cargo test --release --test
 - `src/engine.rs` — BERT, base voice, converter, reference voice embedding.
 - `src/main.rs` — the commands: `load`, `register_voice`, `synthesize` (one answer per piece of text, so playback can start early).
 - `data/` — dictionaries, tokenizer, base voice embeddings, g2p weights (small; the app downloads them).
-- `models/` — the ONNX graphs: `melo.onnx` (162 MB), `converter.onnx` (122 MB), `bert10.onnx` (362 MB, BERT's first 10 layers: MeloTTS reads the
-  output of layer 10 of 12), `ref_enc.onnx` (3 MB). Made by `tools/export_*.py` and `tools/pipeline_onnx.py` from the original weights.
+- `models/` — the ONNX graphs, 426 MB in all: `melo.onnx` (162 MB), `converter.onnx` (61 MB), `bert10.onnx` (181 MB, BERT's first 10 layers: MeloTTS reads the
+  output of layer 10 of 12), `ref_enc.onnx` (2 MB). Made by `tools/export_*.py` and `tools/pipeline_onnx.py` from the original weights, then
+  `tools/shrink_models.py` stores the large weights of all but `melo.onnx` as float16 (cast back to float32 inside the graph): half the size,
+  the same arithmetic. Int8 quantization was tried and was too inexact; `melo.onnx` stays float32 because its duration rounding is sensitive.
   `melo.onnx` is exported with the spline rewritten without boolean-mask indexing (`tools/export_melo_nz.py`): the mask indexing became `NonZero` ops,
   each a wait for the GPU, which a game filling the GPU stretches to hundreds of milliseconds.
 
