@@ -1,6 +1,6 @@
 [package]
 name = "openvoice-server"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "MIT"
 description = "OpenVoice V2 (MeloTTS English + tone color converter) for Mutelink: English text in, speech in the reference voice out. Runs as a child process of the app, like irodori-server."
