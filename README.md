@@ -42,6 +42,10 @@ OPENVOICE_ORT_DLL=<onnxruntime.dll> OPENVOICE_CUDA=1 cargo test --release --test
 - The 18 rare plural homographs that g2p_en resolves by part of speech (e.g. "retakes") are not; they are spelled out by the network.
 - Speed depends on how busy the GPU is: with VRChat running, the real-time factor is about 0.1 - 0.25 on an RTX 4070.
 
+## Release
+
+The executable is built by GitHub Actions (`.github/workflows/release.yml`). Raise `version` in `Cargo.toml`, commit, and push a tag `server-vX.Y.Z` with the same number: the workflow runs the unit tests, builds with `--locked`, and publishes the exe as the release of that tag with its SHA-256 in the notes (Mutelink pins that checksum). "Run workflow" on the Actions page only builds and tests, and keeps the exe as an artifact. The models and data are the assets of release `models-v1` (made with `tools/shrink_models.py`), uploaded by hand.
+
 ## License
 
 MIT ([LICENSE](LICENSE)). The models, data and the software this is ported from are under their own licenses: see [NOTICE.md](NOTICE.md) and [MODEL_LICENSES.md](MODEL_LICENSES.md).
